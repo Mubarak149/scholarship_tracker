@@ -10,6 +10,15 @@
   <p><strong>Work Permit Available:</strong> {{ scholarship.work_permit_available|yesno:"Yes,No" }}</p>
   <p><strong>Description:</strong><br>{{ scholarship.description|default:"(No description)" }}</p>
 
+  {% if scholarship.summary %}
+    <div class="mt-4 bg-gray-50 p-4 rounded">
+      <h2 class="text-xl font-semibold mb-2">AI Summary</h2>
+      <div class="prose">
+        {{ scholarship.summary|linebreaks }}
+      </div>
+    </div>
+  {% endif %}
+
   <hr class="my-4">
 
   <h2 class="text-xl font-semibold">Status</h2>

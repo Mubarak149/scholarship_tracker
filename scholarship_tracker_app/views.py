@@ -113,7 +113,7 @@ def edit_scholarship(request, pk):
             values = request.POST.getlist("custom_value[]")
             for k, v in zip(keys, values):
                 if k and v:
-                    CustomField.objects.create(scholarship=scholarship, key=k, value=v)
+                    CustomField.objects.create(scholarship=scholarship, field_name=k, field_value=v)
 
             messages.success(request, "Scholarship updated successfully.")
             return redirect("scholarship_detail", pk=pk)

@@ -16,6 +16,7 @@ class Scholarship(models.Model):
     visa_application_fee = models.BooleanField(default=False)
     work_permit_available = models.BooleanField(default=False)
     description = models.TextField(blank=True, null=True)
+    summary = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
