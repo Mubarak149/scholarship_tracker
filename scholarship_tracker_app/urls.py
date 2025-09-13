@@ -9,6 +9,7 @@ urlpatterns = [
     # 🔹 Scholarship CRUD
     path("scholarships/", views.scholarship_list, name="scholarship_list"),
     path("scholarships/add/", views.add_scholarship, name="add_scholarship"),
+    path("scholarships/ai-create/", views.scholarship_ai_create, name="scholarship_ai_create"),
     path("scholarships/<int:pk>/", views.scholarship_detail, name="scholarship_detail"),
     path("scholarships/<int:pk>/edit/", views.edit_scholarship, name="edit_scholarship"),
     path("scholarships/<int:pk>/delete/", views.delete_scholarship, name="delete_scholarship"),

@@ -2,10 +2,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.contrib import messages
-
 from .models import Scholarship, CustomField
 from .forms import ScholarshipForm
-
+from .utils import extract_scholarship_data
 
 # 🔹 Dashboard View
 @login_required
@@ -95,6 +94,57 @@ def add_scholarship(request):
         form = ScholarshipForm()
 
     return render(request, "scholarship_tracker_app/scholarship_form.html", {"form": form})
+
+
+
+@login_required
+def scholarship_ai_create(request):
+    if request.method == "POST":
+        description_text = request.POST.get("description_text", "")
+
+        if not description_text.strip():
+            messages.error(request, "Please paste a scholarship description.")
+            return redirect("scholarship_ai_create")
+
+        try:
+            # AI extraction
+            data = extract_scholarship_data(description_text)
+
+            # Build the scholarship form
+            form = ScholarshipForm({
+                "name": data.get("name"),
+                "provider": data.get("provider"),
+                "funding_type": data.get("funding_type", "partial"),
+                "deadline": data.get("deadline"),
+                "flight_ticket_fee": data.get("flight_ticket_fee"),
+                "visa_application_fee": data.get("visa_application_fee"),
+                "work_permit_available": data.get("work_permit_available"),
+                "description": description_text,
+            })
+
+            if form.is_valid():
+                scholarship = form.save(commit=False)
+                scholarship.user = request.user
+                scholarship.summary = data.get("summary")
+                scholarship.save()
+
+                # Save custom fields
+                for field in data.get("custom_fields", []):
+                    CustomField.objects.create(
+                        scholarship=scholarship,
+                        field_name=field.get("field_name"),
+                        field_value=field.get("field_value")
+                    )
+
+                messages.success(request, f"Scholarship '{scholarship.name}' created with AI extraction!")
+                return redirect("scholarship_detail", scholarship.id)
+            else:
+                messages.error(request, f"Form validation failed: {form.errors}")
+
+        except Exception as e:
+            messages.error(request, f"AI extraction failed: {str(e)}")
+
+    return render(request, "scholarship_tracker_app/ai_create.html")
 
 
 # 🔹 Edit Scholarship

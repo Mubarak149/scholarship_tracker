@@ -1,0 +1,11 @@
+<!-- templates/scholarships/ai_create.html -->
+{% extends "base.html" %}
+{% block content %}
+<h2>Create Scholarship with AI</h2>
+<form method="post">
+    {% csrf_token %}
+    <label for="description_text">Paste Scholarship Description:</label><br>
+    <textarea name="description_text" rows="10" cols="80"></textarea><br><br>
+    <button type="submit">Create Scholarship</button>
+</form>
+{% endblock %}
