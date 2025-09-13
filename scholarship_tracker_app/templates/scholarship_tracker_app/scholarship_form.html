@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Page Header -->
+    <h2 class="mb-4">
+        {% if scholarship %}
+            Edit Scholarship
+        {% else %}
+            Add Scholarship
+        {% endif %}
+    </h2>
+
+    <!-- Show form errors -->
+    {% if form.errors %}
+    <div class="alert alert-danger">
+        <ul>
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <li>{{ field.label }}: {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <!-- Scholarship Form -->
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="row">
+            <!-- Left column: Core fields -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    {{ form.name.label_tag }}  
+                    {{ form.name }}
+                </div>
+                <div class="mb-3">
+                    {{ form.provider.label_tag }}
+                    {{ form.provider }}
+                </div>
+                <div class="mb-3">
+                    {{ form.funding_type.label_tag }}
+                    {{ form.funding_type }}
+                </div>
+                <div class="mb-3">
+                    {{ form.status.label_tag }}
+                    {{ form.status }}
+                </div>
+                <div class="mb-3">
+                    {{ form.deadline.label_tag }}
+                    {{ form.deadline }}
+                </div>
+            </div>
+
+            <!-- Right column: Extra fields -->
+            <div class="col-md-6">
+                <div class="form-check mb-2">
+                    {{ form.flight_ticket_fee }} {{ form.flight_ticket_fee.label_tag }}
+                </div>
+                <div class="form-check mb-2">
+                    {{ form.visa_application_fee }} {{ form.visa_application_fee.label_tag }}
+                </div>
+                <div class="form-check mb-2">
+                    {{ form.work_permit_available }} {{ form.work_permit_available.label_tag }}
+                </div>
+                <div class="mb-3">
+                    {{ form.description.label_tag }}
+                    {{ form.description }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom Fields Section -->
+        <h5 class="mt-4">Custom Fields</h5>
+        <div id="custom-fields">
+            {% if custom_fields %}
+                {% for field in custom_fields %}
+                <div class="row mb-2 custom-field-row">
+                    <div class="col">
+                        <input type="text" class="form-control" name="custom_key[]" placeholder="Key" value="{{ field.field_name }}">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" name="custom_value[]" placeholder="Value" value="{{ field.field_value }}">
+                    </div>
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-danger remove-field">X</button>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <!-- Add new custom field button -->
+        <button type="button" class="btn btn-outline-primary mb-3" id="add-field">
+            + Add Custom Field
+        </button>
+
+        <!-- Submit Buttons -->
+        <div>
+            <button type="submit" class="btn btn-primary">
+                {% if scholarship %} Update {% else %} Save {% endif %}
+            </button>
+            <a href="{% url 'scholarship_list' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<!-- JavaScript to handle dynamic fields -->
+<script>
+document.getElementById("add-field").addEventListener("click", function() {
+    const container = document.getElementById("custom-fields");
+    const div = document.createElement("div");
+    div.classList.add("row", "mb-2", "custom-field-row");
+    div.innerHTML = `
+        <div class="col">
+            <input type="text" class="form-control" name="custom_key[]" placeholder="Key">
+        </div>
+        <div class="col">
+            <input type="text" class="form-control" name="custom_value[]" placeholder="Value">
+        </div>
+        <div class="col-auto">
+            <button type="button" class="btn btn-danger remove-field">X</button>
+        </div>
+    `;
+    container.appendChild(div);
+});
+
+// Event delegation for removing custom fields
+document.getElementById("custom-fields").addEventListener("click", function(e) {
+    if (e.target.classList.contains("remove-field")) {
+        e.target.closest(".custom-field-row").remove();
+    }
+});
+</script>
+{% endblock %}

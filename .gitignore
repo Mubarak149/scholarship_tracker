@@ -205,3 +205,72 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Django #
+*.log
+*.pot
+*.pyc
+__pycache__/
+db.sqlite3
+
+# If you use PostgreSQL/other DB, ignore local dumps
+*.pgsql
+*.sql
+*.sqlite3
+
+# Media & Static files #
+/media/
+/static/
+/staticfiles/
+/assets/
+
+# Environment & Virtualenv #
+.env
+*.env
+venv/
+ENV/
+env/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# IDE & Editor settings #
+.vscode/
+.idea/
+*.swp
+*.swo
+*.DS_Store
+
+# Coverage & Test #
+htmlcov/
+.coverage
+coverage.xml
+*.cover
+*.py,cover
+*.db
+*.db-journal
+*.sqlite
+
+# Byte-compiled / optimized files #
+*.pyo
+*.pyd
+*$py.class
+
+# Backup files #
+*.bak
+*.orig
+
+# Build / Packaging #
+*.egg-info/
+*.egg
+dist/
+build/
+eggs/
+parts/
+var/
+wheels/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/

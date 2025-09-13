@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-3xl mx-auto bg-white p-6 rounded shadow">
+  <h1 class="text-2xl font-bold mb-4">{{ scholarship.name }}</h1>
+  <p><strong>Provider:</strong> {{ scholarship.provider|default:"N/A" }}</p>
+  <p><strong>Funding Type:</strong> {{ scholarship.get_funding_type_display }}</p>
+  <p><strong>Deadline:</strong> {{ scholarship.deadline|date:"M d, Y" }}</p>
+  <p><strong>Flight Ticket Fee:</strong> {{ scholarship.flight_ticket_fee|yesno:"Yes,No" }}</p>
+  <p><strong>Visa Application Fee:</strong> {{ scholarship.visa_application_fee|yesno:"Yes,No" }}</p>
+  <p><strong>Work Permit Available:</strong> {{ scholarship.work_permit_available|yesno:"Yes,No" }}</p>
+  <p><strong>Description:</strong><br>{{ scholarship.description|default:"(No description)" }}</p>
+
+  <hr class="my-4">
+
+  <h2 class="text-xl font-semibold">Status</h2>
+  <p>
+    <span class="px-2 py-1 rounded bg-blue-100 text-blue-600">
+      {{ scholarship.current_status }}
+    </span>
+    {% if scholarship.latest_status_date %}
+      (updated {{ scholarship.latest_status_date|date:"M d, Y H:i" }})
+    {% endif %}
+  </p>
+
+  <hr class="my-4">
+
+  <h2 class="text-xl font-semibold">Custom Fields</h2>
+  {% if custom_fields %}
+    <ul class="list-disc list-inside">
+      {% for field in custom_fields %}
+        <li><strong>{{ field.field_name }}:</strong> {{ field.field_value }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="text-gray-500">No extra fields.</p>
+  {% endif %}
+
+  <div class="mt-6 flex gap-4">
+    <a href="{% url 'edit_scholarship' scholarship.id %}" class="bg-yellow-500 text-white px-4 py-2 rounded">Edit</a>
+    <a href="{% url 'delete_scholarship' scholarship.id %}" class="bg-red-500 text-white px-4 py-2 rounded">Delete</a>
+    <a href="{% url 'scholarship_list' %}" class="bg-gray-500 text-white px-4 py-2 rounded">Back</a>
+  </div>
+</div>
+{% endblock %}

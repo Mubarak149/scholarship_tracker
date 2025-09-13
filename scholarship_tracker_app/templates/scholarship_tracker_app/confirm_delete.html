@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Delete Scholarship{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h3 class="text-danger">⚠️ Confirm Delete</h3>
+        <p>Are you sure you want to delete the scholarship <strong>{{ scholarship.name }}</strong>?</p>
+        
+        <form method="post">
+            {% csrf_token %}
+            <a href="{% url 'scholarship_list' %}" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

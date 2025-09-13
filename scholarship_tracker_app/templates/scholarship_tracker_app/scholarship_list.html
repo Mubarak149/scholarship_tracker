@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}My Scholarships{% endblock %}
+{% block content %}
+<h2>My Scholarships</h2>
+
+<form method="get" class="mb-3">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" name="q" value="{{ request.GET.q }}" class="form-control" placeholder="Search by name">
+        </div>
+        <div class="col-md-3">
+            <select name="status" class="form-control">
+                <option value="All">All Status</option>
+                <option value="Pending" {% if request.GET.status == "Pending" %}selected{% endif %}>Pending</option>
+                <option value="Accepted" {% if request.GET.status == "Accepted" %}selected{% endif %}>Accepted</option>
+                <option value="Rejected" {% if request.GET.status == "Rejected" %}selected{% endif %}>Rejected</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary w-100">Filter</button>
+        </div>
+    </div>
+</form>
+
+<a href="{% url 'add_scholarship' %}" class="btn btn-success mb-3">➕ Add Scholarship</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Funding Type</th>
+            <th>Status</th>
+            <th>Deadline</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for s in scholarships %}
+        <tr>
+            <td><a href="{% url 'scholarship_detail' s.pk %}">{{ s.name }}</a></td>
+            <td>{{ s.funding_type }}</td>
+            <td>{{ s.current_status }}</td>
+            <td>{{ s.deadline|date:"M d, Y" }}</td>
+            <td>
+                <a href="{% url 'edit_scholarship' s.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="{% url 'delete_scholarship' s.pk %}" class="btn btn-sm btn-danger">Delete</a>
+            </td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="5">No scholarships found.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
